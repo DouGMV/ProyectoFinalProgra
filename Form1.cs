@@ -18,6 +18,7 @@ namespace ProyectoFinalProgra
         {
             InitializeComponent();
             serialPort = new SerialPort("COM3", 9600);
+            serialPort.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -53,6 +54,19 @@ namespace ProyectoFinalProgra
             if (data.Contains("OK"))
             {
                 MessageBox.Show("Datos recibidos correctamente por el Arduino.", "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (data.Contains("Precio total:"))
+            {
+                string[] parts = data.Split(':');
+                if (parts.Length == 2)
+                {
+                    string precioTotalStr = parts[1].Trim();
+                    int precioTotal;
+                    if (int.TryParse(precioTotalStr, out precioTotal))
+                    {
+                        MessageBox.Show($"El precio total es: {precioTotal}");
+                    }
+                }
             }
         }
 
@@ -97,7 +111,7 @@ namespace ProyectoFinalProgra
         {
             if (serialPort.IsOpen)
             {
-                serialPort.Write(datos);
+                serialPort.WriteLine(datos);
             }
             else
             {
@@ -148,3 +162,4 @@ namespace ProyectoFinalProgra
         }
     }
 }
+
