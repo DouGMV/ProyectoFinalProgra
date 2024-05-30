@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoFinalProgra
 {
-    public class Abastecimiento
+    internal class Reporte
     {
         public string Cliente { get; set; }
         public DateTime FechaHora { get; set; }

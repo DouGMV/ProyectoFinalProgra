@@ -13,11 +13,12 @@ namespace ProyectoFinalProgra
     {
         private SerialPort serialPort;
         List<Abastecimiento> abastecimientos = new List<Abastecimiento>();
+        List<Reporte> reportes = new List<Reporte>();
 
         public Form1()
         {
             InitializeComponent();
-            serialPort = new SerialPort("COM3", 9600);
+            serialPort = new SerialPort("COM5", 9600);
             serialPort.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived);
         }
 
@@ -72,9 +73,9 @@ namespace ProyectoFinalProgra
 
         public void MostrarAbastecimientos()
         {
-            //Mostrar la lista de Reporte en el DataGridView
+            //Mostrar la lista de Abastecimiento en el DataGridView
             dataGridView.DataSource = null;
-            dataGridView.DataSource = abastecimientos;
+            dataGridView.DataSource = reportes;
             dataGridView.Refresh();
         }
 
@@ -87,10 +88,20 @@ namespace ProyectoFinalProgra
             abastecimiento.Cliente = textBoxCliente.Text;
             abastecimiento.FechaHora = DateTime.Now;
             abastecimiento.Monto = textBoxMontoPagar.Text;
-            abastecimiento.TipoAbasatecimiento = comboBoxTipoAbastecimiento.Text;
+            abastecimiento.TipoAbastecimiento = comboBoxTipoAbastecimiento.Text;
 
             // Guardar datos
             abastecimientos.Add(abastecimiento);
+
+            Reporte reporte = new Reporte();
+            reporte.Bomba = abastecimiento.Bomba;
+            reporte.Cliente = abastecimiento.Cliente;
+            reporte.FechaHora = DateTime.Now;
+            reporte.Monto = abastecimiento.Monto;
+            reporte.TipoAbastecimiento = abastecimiento.TipoAbastecimiento;
+
+            reportes.Add(reporte);
+
             MostrarAbastecimientos();
             GrabarAbastecimientos();
             GuardarDatosComoJson();
@@ -130,7 +141,7 @@ namespace ProyectoFinalProgra
                 writer.WriteLine(abastecimiento.FechaHora);
                 writer.WriteLine(abastecimiento.Bomba);
                 writer.WriteLine(abastecimiento.Monto);
-                writer.WriteLine(abastecimiento.TipoAbasatecimiento);
+                writer.WriteLine(abastecimiento.TipoAbastecimiento);
             }
             writer.Close();
         }
@@ -138,7 +149,7 @@ namespace ProyectoFinalProgra
         private void buttonMostrarAbastecimiento_Click(object sender, EventArgs e)
         {
             // Ruta de archivo
-            string filePath = "C:\\Users\\Sir_d\\source\\repos\\ProyectoFinalProgra\\bin\\Debug\\abastecimientos.txt";
+            string filePath = "C:\\Users\\chipi\\Source\\Repos\\ProyectoFinalProgra\\bin\\Debug\\abastecimientos.txt";
 
             if (File.Exists(filePath))
             {
