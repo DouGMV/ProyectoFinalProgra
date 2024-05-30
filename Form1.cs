@@ -15,6 +15,11 @@ namespace ProyectoFinalProgra
         List<Abastecimiento> abastecimientos = new List<Abastecimiento>();
         List<Reporte> reportes = new List<Reporte>();
 
+        int contador_b1 = 0;
+        int contador_b2 = 0;
+        int contador_a1 = 0;
+        int contador_a2 = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -171,6 +176,92 @@ namespace ProyectoFinalProgra
                 MessageBox.Show("El archivo especificado no existe.");
             }
         }
+
+        private void CierreDeCajaDiario(DateTime fecha)
+        {
+            decimal total = 0;
+            foreach (var reporte in reportes)
+            {
+                if (reporte.FechaHora.Date == fecha.Date)
+                {
+                    total += Convert.ToDecimal(reporte.Monto);
+                }
+            }
+            labelCierreCaja.Visible = true;
+            labelCierreCaja.Text = $"Cierre de caja para el {fecha.ToShortDateString()}: Total: {total}";
+        }
+
+
+        private void InformeAbastecimientosPorEstilo()
+        {
+            if (comboBoxTipoAbastecimiento.Text == "Prepago limitado")
+            {
+                contador_a1++;
+
+            }
+            else if (comboBoxTipoAbastecimiento.Text == "Tanque lleno")
+            {
+                contador_a2++;
+
+            }
+
+            labelPrepago.Text = contador_a1 + " veces";
+            labelTanque.Text = contador_a2 + " veces";
+
+            labelPrepago.Visible = true;
+            labelTanque.Visible = true;
+        }
+
+
+        private void InformeBombasUtilizadas()
+        {
+            if (comboBoxBomba.Text == "Bomba 1")
+            {
+                contador_b1++;
+
+            }
+            else if (comboBoxBomba.Text == "Bomba 2")
+            {
+                contador_b2++;
+
+            }
+            if (contador_b1 > contador_b2)
+            {
+                labelBombaMasUtilizada.Text = "Bomba 1 usos: " + contador_b1 + " veces";
+                labelBombaMenosUtilizada.Text = "Bomba 2 usos:" + contador_b2 + " veces";
+            }
+            else if (contador_b1 < contador_b2)
+            {
+                labelBombaMenosUtilizada.Text = "Bomba 1 usos: " + contador_b1 + " veces";
+                labelBombaMasUtilizada.Text = "Bomba 2 usos: " + contador_b2 + " veces";
+            }
+            else if(contador_b1 == contador_b2)
+            {
+                labelBombaMenosUtilizada.Text = "Ambas bombas lo son";
+                labelBombaMasUtilizada.Text = "Ambas bombas lo son";
+            }
+            labelBombaMasUtilizada.Visible = true;
+            labelBombaMenosUtilizada.Visible = true;
+        }
+
+        private void buttonEstadisticas_Click_1(object sender, EventArgs e)
+        {
+            DateTime fechaActual = DateTime.Today;
+            CierreDeCajaDiario(fechaActual);
+            InformeAbastecimientosPorEstilo();
+            InformeBombasUtilizadas();
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }
 
