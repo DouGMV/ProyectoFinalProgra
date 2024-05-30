@@ -13,5 +13,6 @@ namespace ProyectoFinalProgra
         public string Monto { get; set; }
         public string Bomba { get; set; }
         public string TipoAbastecimiento { get; set; }
+        public string Espacio { get; set; }
     }
 }

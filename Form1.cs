@@ -19,6 +19,7 @@ namespace ProyectoFinalProgra
         int contador_b2 = 0;
         int contador_a1 = 0;
         int contador_a2 = 0;
+        bool sePresionoAbastecer = false;
 
         public Form1()
         {
@@ -87,13 +88,14 @@ namespace ProyectoFinalProgra
         private void buttonAbastecer_Click(object sender, EventArgs e)
         {
             // Obtener datos
-            
+            abastecimientos.Clear();
             Abastecimiento abastecimiento = new Abastecimiento();
             abastecimiento.Bomba = comboBoxBomba.Text;
             abastecimiento.Cliente = textBoxCliente.Text;
             abastecimiento.FechaHora = DateTime.Now;
             abastecimiento.Monto = textBoxMontoPagar.Text;
             abastecimiento.TipoAbastecimiento = comboBoxTipoAbastecimiento.Text;
+            abastecimiento.Espacio = "";
 
             // Guardar datos
             abastecimientos.Add(abastecimiento);
@@ -107,12 +109,18 @@ namespace ProyectoFinalProgra
 
             reportes.Add(reporte);
 
+            sePresionoAbastecer = true;
+
+            InformeAbastecimientosPorEstilo();
+            InformeBombasUtilizadas();
             MostrarAbastecimientos();
             GrabarAbastecimientos();
             GuardarDatosComoJson();
 
             textBoxCliente.Clear();
             textBoxMontoPagar.Clear();
+
+            sePresionoAbastecer = false;
         }
 
         private void GuardarDatosComoJson()
@@ -147,6 +155,7 @@ namespace ProyectoFinalProgra
                 writer.WriteLine(abastecimiento.Bomba);
                 writer.WriteLine(abastecimiento.Monto);
                 writer.WriteLine(abastecimiento.TipoAbastecimiento);
+                writer.WriteLine(abastecimiento.Espacio);
             }
             writer.Close();
         }
@@ -154,7 +163,7 @@ namespace ProyectoFinalProgra
         private void buttonMostrarAbastecimiento_Click(object sender, EventArgs e)
         {
             // Ruta de archivo
-            string filePath = "C:\\Users\\chipi\\Source\\Repos\\ProyectoFinalProgra\\bin\\Debug\\abastecimientos.txt";
+            string filePath = "C:\\Users\\Sir_d\\Source\\Repos\\ProyectoFinalProgra\\bin\\Debug\\abastecimientos.txt";
 
             if (File.Exists(filePath))
             {
@@ -194,12 +203,12 @@ namespace ProyectoFinalProgra
 
         private void InformeAbastecimientosPorEstilo()
         {
-            if (comboBoxTipoAbastecimiento.Text == "Prepago limitado")
+            if (comboBoxTipoAbastecimiento.Text == "Prepago limitado" && sePresionoAbastecer == true)
             {
                 contador_a1++;
 
             }
-            else if (comboBoxTipoAbastecimiento.Text == "Tanque lleno")
+            else if (comboBoxTipoAbastecimiento.Text == "Tanque lleno" && sePresionoAbastecer == true)
             {
                 contador_a2++;
 
@@ -215,12 +224,12 @@ namespace ProyectoFinalProgra
 
         private void InformeBombasUtilizadas()
         {
-            if (comboBoxBomba.Text == "Bomba 1")
+            if (comboBoxBomba.Text == "Bomba 1" && sePresionoAbastecer == true)
             {
                 contador_b1++;
 
             }
-            else if (comboBoxBomba.Text == "Bomba 2")
+            else if (comboBoxBomba.Text == "Bomba 2" && sePresionoAbastecer == true)
             {
                 contador_b2++;
 
