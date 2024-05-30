@@ -23,6 +23,7 @@ namespace ProyectoFinalProgra
 
         public Form1()
         {
+            //Conexión del Programa al Arduino
             InitializeComponent();
             serialPort = new SerialPort("COM5", 9600);
             serialPort.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived);
@@ -30,6 +31,7 @@ namespace ProyectoFinalProgra
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //Configuracion del Arduino Al no detectar el dispositivo conectado
             try
             {
                 if (!serialPort.IsOpen)
@@ -57,6 +59,7 @@ namespace ProyectoFinalProgra
 
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
+            //Envio de datos al Arduino
             string data = serialPort.ReadLine();
             if (data.Contains("OK"))
             {
