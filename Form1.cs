@@ -19,6 +19,7 @@ namespace ProyectoFinalProgra
         int contador_b2 = 0;
         int contador_a1 = 0;
         int contador_a2 = 0;
+        bool sePresionoAbastecer = false;
 
         public Form1()
         {
@@ -107,12 +108,18 @@ namespace ProyectoFinalProgra
 
             reportes.Add(reporte);
 
+            sePresionoAbastecer = true;
+
+            InformeAbastecimientosPorEstilo();
+            InformeBombasUtilizadas();
             MostrarAbastecimientos();
             GrabarAbastecimientos();
             GuardarDatosComoJson();
 
             textBoxCliente.Clear();
             textBoxMontoPagar.Clear();
+
+            sePresionoAbastecer = false;
         }
 
         private void GuardarDatosComoJson()
@@ -194,12 +201,12 @@ namespace ProyectoFinalProgra
 
         private void InformeAbastecimientosPorEstilo()
         {
-            if (comboBoxTipoAbastecimiento.Text == "Prepago limitado")
+            if (comboBoxTipoAbastecimiento.Text == "Prepago limitado" && sePresionoAbastecer == true)
             {
                 contador_a1++;
 
             }
-            else if (comboBoxTipoAbastecimiento.Text == "Tanque lleno")
+            else if (comboBoxTipoAbastecimiento.Text == "Tanque lleno" && sePresionoAbastecer == true)
             {
                 contador_a2++;
 
@@ -215,12 +222,12 @@ namespace ProyectoFinalProgra
 
         private void InformeBombasUtilizadas()
         {
-            if (comboBoxBomba.Text == "Bomba 1")
+            if (comboBoxBomba.Text == "Bomba 1" && sePresionoAbastecer == true)
             {
                 contador_b1++;
 
             }
-            else if (comboBoxBomba.Text == "Bomba 2")
+            else if (comboBoxBomba.Text == "Bomba 2" && sePresionoAbastecer == true)
             {
                 contador_b2++;
 
