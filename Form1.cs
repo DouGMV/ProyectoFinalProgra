@@ -82,7 +82,7 @@ namespace ProyectoFinalProgra
         private void buttonAbastecer_Click(object sender, EventArgs e)
         {
             // Obtener datos
-            abastecimientos.Clear();
+            
             Abastecimiento abastecimiento = new Abastecimiento();
             abastecimiento.Bomba = comboBoxBomba.Text;
             abastecimiento.Cliente = textBoxCliente.Text;
