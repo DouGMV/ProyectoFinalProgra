@@ -23,15 +23,15 @@ namespace ProyectoFinalProgra
 
         public Form1()
         {
-            //Conexión del Programa al Arduino
+            // Conexión del Programa al Arduino
             InitializeComponent();
-            serialPort = new SerialPort("COM5", 9600);
+            serialPort = new SerialPort("COM3", 9600);
             serialPort.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceived);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //Configuracion del Arduino Al no detectar el dispositivo conectado
+            // Configuración del Arduino al no detectar el dispositivo conectado
             try
             {
                 if (!serialPort.IsOpen)
@@ -59,7 +59,7 @@ namespace ProyectoFinalProgra
 
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            //Envio de datos al Arduino
+            // Envío de datos al Arduino
             string data = serialPort.ReadLine();
             if (data.Contains("OK"))
             {
@@ -82,7 +82,7 @@ namespace ProyectoFinalProgra
 
         public void MostrarAbastecimientos()
         {
-            //Mostrar la lista de Abastecimiento en el DataGridView
+            // Mostrar la lista de Abastecimiento en el DataGridView
             dataGridView.DataSource = null;
             dataGridView.DataSource = reportes;
             dataGridView.Refresh();
@@ -128,11 +128,19 @@ namespace ProyectoFinalProgra
 
         private void GuardarDatosComoJson()
         {
-            string json = JsonConvert.SerializeObject(abastecimientos, Formatting.Indented);
+            var datosJson = new
+            {
+                Bomba = comboBoxBomba.Text,
+                Monto = textBoxMontoPagar.Text,
+                TipoAbastecimiento = comboBoxTipoAbastecimiento.Text
+            };
+            string json = JsonConvert.SerializeObject(datosJson, Formatting.Indented);
             File.WriteAllText("datos.json", json);
 
+            MessageBox.Show("JSON enviado al Arduino:\n" + json, "Mensaje de Depuración", MessageBoxButtons.OK, MessageBoxIcon.Information);
             EnviarDatosArduino(json);
         }
+
 
         private void EnviarDatosArduino(string datos)
         {
@@ -145,6 +153,7 @@ namespace ProyectoFinalProgra
                 MessageBox.Show("El puerto COM no está abierto.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void GrabarAbastecimientos()
         {
@@ -203,7 +212,6 @@ namespace ProyectoFinalProgra
             labelCierreCaja.Text = $"Cierre de caja para el {fecha.ToShortDateString()}: Total: {total}";
         }
 
-
         private void InformeAbastecimientosPorEstilo()
         {
             if (comboBoxTipoAbastecimiento.Text == "Prepago limitado" && sePresionoAbastecer == true)
@@ -223,7 +231,6 @@ namespace ProyectoFinalProgra
             labelPrepago.Visible = true;
             labelTanque.Visible = true;
         }
-
 
         private void InformeBombasUtilizadas()
         {
@@ -247,7 +254,7 @@ namespace ProyectoFinalProgra
                 labelBombaMenosUtilizada.Text = "Bomba 1 usos: " + contador_b1 + " veces";
                 labelBombaMasUtilizada.Text = "Bomba 2 usos: " + contador_b2 + " veces";
             }
-            else if(contador_b1 == contador_b2)
+            else if (contador_b1 == contador_b2)
             {
                 labelBombaMenosUtilizada.Text = "Ambas bombas lo son";
                 labelBombaMasUtilizada.Text = "Ambas bombas lo son";
@@ -273,7 +280,6 @@ namespace ProyectoFinalProgra
         {
 
         }
-
     }
 }
 
